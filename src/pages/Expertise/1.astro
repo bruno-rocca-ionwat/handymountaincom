@@ -1,13 +1,15 @@
 ---
 import { Image } from 'astro:assets';
-import corgi from '../assets/corgi.jpg';
-import Diff from '../components/Diff.astro';
-import Markdown from '../components/Markdown.astro';
-import Layout from '../layouts/Layout.astro';
+import corgi from '../../assets/corgi.jpg';
+import Diff from '../../components/Diff.astro';
+import Markdown from '../../components/Markdown.astro';
+import Layout from '../../layouts/Layout.astro';
 
 const sampleImage = '/images/corgi.jpg';
 
-const forceWebP = process.env.NODE_ENV = "development";
+// Compare instead of assigning (your original code was mutating NODE_ENV)
+const forceWebP = process.env.NODE_ENV === 'development';
+
 const sampleImageSrcSet = [640, 1280, 2048]
     .map((size) => {
         return `/.netlify/images?url=${sampleImage}&w=${size}${forceWebP ? '&fm=webp' : ''} ${size}w`;
