@@ -43,7 +43,7 @@ export default function StoredShapes(props: Props) {
 
     return (
         <>
-            <h2 className="mb-4 text-xl text-center sm:text-xl">Objects in Blob Store</h2>
+            <h2 className="mb-4 text-xl text-center sm:text-xl">Current Projects in Process</h2>
             <div className="w-full bg-white rounded-lg">
                 <div className="p-4 text-center min-h-14">
                     {keys?.length ? (
