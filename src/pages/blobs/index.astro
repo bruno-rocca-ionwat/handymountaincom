@@ -4,7 +4,6 @@ import Markdown from '../../components/Markdown.astro';
 import ShapeEditor from './_components/ShapeEditor.tsx';
 import { uploadDisabled } from '../../utils';
 
-
 const explainer = `
 Step1:  Create your unique inquiry, by clicking randomize to create a unique instance, and click upload to set your place in our queue. 
 
@@ -32,7 +31,6 @@ Step3: You will get an immediate response from us as to the cost of the task and
 Step4: this insures that all inquiries are handles in the order that they are received and provides a simple way for our clients and us to stay on the same page. 🙂.
 `;
 
-
 const uploadDisabledText = `
 User uploads are disabled in this site. To run your own and try it out: 
 <a href="https://app.netlify.com/start/deploy?repository=https://github.com/netlify-templates/astro-platform-starter">
@@ -42,7 +40,48 @@ User uploads are disabled in this site. To run your own and try it out:
 ---
 
 <Layout title="Blobs">
-    <h1 class="mb-10">Create Your Inquiry</h1>
-    <Markdown content={explainer} class="mb-12" />
-    <ShapeEditor client:load />
+  <h1 class="mb-10">Create Your Inquiry</h1>
+
+  <Markdown content={explainer} class="mb-12" />
+
+  <!-- Netlify form -->
+  <form
+    name="contact"
+    method="POST"
+    data-netlify="true"
+    class="mb-12 max-w-xl space-y-6"
+  >
+    <!-- required for Netlify form detection -->
+    <input type="hidden" name="form-name" value="contact" />
+
+    <p class="space-y-2">
+      <label class="block font-semibold">
+        Inquiry
+        <input
+          type="text"
+          name="INQ"
+          class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
+        />
+      </label>
+    </p>
+
+    <p class="space-y-2">
+      <label class="block font-semibold">
+        Email
+        <input
+          type="email"
+          name="email"
+          class="mt-2 block w-full rounded border border-white/20 bg-white/10 px-3 py-2 text-white"
+        />
+      </label>
+    </p>
+
+    <p>
+      <button type="submit" class="btn">
+        Send
+      </button>
+    </p>
+  </form>
+
+  <ShapeEditor client:load />
 </Layout>
