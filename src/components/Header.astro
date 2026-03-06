@@ -2,29 +2,68 @@
 import Logo from '../components/Logo.astro';
 
 const navItems = [
-    { linkText: 'Home', href: '/' },
-    { linkText: 'Home Owners', href: '/Home Owners' },
-    { linkText: 'Property Managers', href: '/Property Managers' },
-    { linkText: 'Expertise', href: '/Expertise' },
-    { linkText: 'Instant Quote', href: '/blobs' }
+  { linkText: 'Home', href: '/' },
+  { linkText: 'Home Owners', href: '/Home Owners' },
+  { linkText: 'Property Managers', href: '/Property Managers' },
+
+  {
+    linkText: 'Expertise',
+    href: '/Expertise',
+    children: [
+      { linkText: 'Expertise 1', href: '/Expertise/1' },
+      { linkText: 'Expertise 2', href: '/Expertise/2' },
+      { linkText: 'Expertise 3', href: '/Expertise/3' },
+      { linkText: 'Expertise 4', href: '/Expertise/4' },
+      { linkText: 'Expertise 5', href: '/Expertise/5' },
+      { linkText: 'Expertise 6', href: '/Expertise/6' },
+      { linkText: 'Expertise 7', href: '/Expertise/7' },
+      { linkText: 'Expertise 8', href: '/Expertise/8' },
+      { linkText: 'Expertise 9', href: '/Expertise/9' },
+      { linkText: 'Expertise 10', href: '/Expertise/10' },
+    ],
+  },
+
+  { linkText: 'Instant Quote', href: '/blobs' },
 ];
 ---
 
 <nav class="flex flex-wrap items-center gap-4 pt-6 pb-16 sm:pt-12 sm:pb-24">
-    <a href="/">
-        <Logo />
-    </a>
-    {
-        !!navItems?.length && (
-            <ul class="flex flex-wrap gap-x-4 gap-y-1">
-                {navItems.map((item) => (
-                    <li>
-                        <a href={item.href} class="inline-block px-1.5 py-1 sm:px-3 sm:py-2">
-                            {item.linkText}
-                        </a>
-                    </li>
+  <a href="/">
+    <Logo />
+  </a>
+
+  {
+    !!navItems?.length && (
+      <ul class="flex flex-wrap gap-x-4 gap-y-1">
+        {navItems.map((item) => (
+          <li class="relative group">
+            <a href={item.href} class="inline-block px-1.5 py-1 sm:px-3 sm:py-2">
+              {item.linkText}
+            </a>
+
+            {item.children?.length ? (
+              <ul
+                class="
+                  absolute left-0 top-full z-50 mt-2 min-w-48
+                  rounded-md border border-slate-200 bg-white p-2 shadow-lg
+                  hidden group-hover:block group-focus-within:block
+                "
+              >
+                {item.children.map((child) => (
+                  <li>
+                    <a
+                      href={child.href}
+                      class="block rounded px-3 py-2 hover:bg-slate-100 focus:bg-slate-100"
+                    >
+                      {child.linkText}
+                    </a>
+                  </li>
                 ))}
-            </ul>
-        )
-    }
+              </ul>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+    )
+  }
 </nav>
