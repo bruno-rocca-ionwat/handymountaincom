@@ -31,16 +31,14 @@ import corgi from '../assets/corgi.jpg';
 `;
 
 const originalVsCdnSnippet = `
-## Original vs. optimized image: can you tell the difference?
+## Before vs. After images: Behold the difference?
 
-In the code below, a regular \`<img>\` tag is used in both cases for a framework-agnostic example. 
-Note that aside from Astro's \`Image\` or rolling your own \`<img>\` tags, you can also use the excellent [unpic-img](https://unpic.pics/) package.
 
 ~~~jsx
-// <== On the left, the original image
+// <== On the left, the BEFORE image
 <img src="/images/corgi.jpg" alt="Corgi" />
 
-// ==> On the right, explicitly using Netlify Image CDN endpoint for a responsive image
+// ==> On the right, The AFTER IMAGE
 <img 
   srcSet="${sampleImageSrcSet}"
   sizes="${sizes}" 
@@ -64,10 +62,7 @@ detection, so format is set to WebP.
             <Markdown content={astroImageSnippet} class="mb-8" />
             <figure>
                 <Image src={corgi} alt="Corgi" class="border-2 border-white rounded-lg" />
-                <figcaption class="mt-2 text-sm italic">
-                    Credit: photo by <a href="https://unsplash.com/@alvannee">Alvan Nee</a> on
-                    <a href="https://unsplash.com/photos/long-coated-white-and-brown-dog-lvFlpqEvuRM"> Unsplash </a>
-                </figcaption>
+   
             </figure>
         </section>
         <section>
