@@ -1,9 +1,11 @@
 ---
 import { Image } from 'astro:assets';
-import corgi from '../assets/corgi.jpg';
 import Diff from '../components/Diff.astro';
 import Markdown from '../components/Markdown.astro';
 import Layout from '../layouts/Layout.astro';
+
+// Use an image from /public (served from the site root):
+const corgi = '/in-process1.jpg';
 
 // Images in /public are served from the site root:
 const beforeImage = '/before.jpg';
