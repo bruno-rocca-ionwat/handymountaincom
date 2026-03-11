@@ -5,14 +5,22 @@ import Diff from '../components/Diff.astro';
 import Markdown from '../components/Markdown.astro';
 import Layout from '../layouts/Layout.astro';
 
-const sampleImage = '/images/corgi.jpg';
+// Images in /public are served from the site root:
+const beforeImage = '/before.jpg';
+const afterImage = '/after.jpg';
 
-const forceWebP = process.env.NODE_ENV = "development";
-const sampleImageSrcSet = [640, 1280, 2048]
-    .map((size) => {
-        return `/.netlify/images?url=${sampleImage}&w=${size}${forceWebP ? '&fm=webp' : ''} ${size}w`;
-    })
-    .join(', ');
+// In local dev, Netlify format auto-detection may not run the same way,
+// so force WebP just like your original example intended.
+const forceWebP = process.env.NODE_ENV === 'development';
+
+const makeNetlifySrcSet = (url: string) =>
+	[640, 1280, 2048]
+		.map((w) => `/.netlify/images?url=${url}&w=${w}${forceWebP ? '&fm=webp' : ''} ${w}w`)
+		.join(', ');
+
+const beforeImageSrcSet = makeNetlifySrcSet(beforeImage);
+const afterImageSrcSet = makeNetlifySrcSet(afterImage);
+
 const sizes = '(max-width: 1024px) 100vw, 1024px';
 
 const astroImageSnippet = `
@@ -22,7 +30,7 @@ Our team gets everything done and works with your property calender to keep all 
 
 ~~~jsx
 ---
-// Before...
+ // Before...
 PROPERTY: 1234 Consitution Drive
 task: from 'Hostaway'; touch up paint in all areas
 task: from 'Hostaway'; insure all showers and sinks draining correctly
@@ -30,26 +38,27 @@ task: from 'Hostaway'; evalaute pool area - report of flaking cement from cleane
 task: from 'Breezeway'; fix supply door as hinges are loose.
 task: from 'Breezeway'; fix inoperable RING system
 ---
-// After ...
+ // After ...
 <Image src={corgi} alt="Corgi" /* ... additional props */ />
 ~~~
 `;
 
 const originalVsCdnSnippet = `
-## Original vs. optimized image: can you tell the difference?
-
-In the code below, a regular \`<img>\` tag is used in both cases for a framework-agnostic example. 
-Note that aside from Astro's \`Image\` or rolling your own \`<img>\` tags, you can also use the excellent [unpic-img](https://unpic.pics/) package.
+## Before vs. After: slide to compare
 
 ~~~jsx
-// <== On the left, the original image
-<img src="/images/corgi.jpg" alt="Corgi" />
+// <== On the left, before (Netlify Image CDN)
+<img
+  srcSet="...generated..."
+  sizes="${sizes}"
+  alt="Before"
+/>
 
-// ==> On the right, explicitly using Netlify Image CDN endpoint for a responsive image
-<img 
-  srcSet="${sampleImageSrcSet}"
-  sizes="${sizes}" 
-  alt="Corgi" 
+// ==> On the right, after (Netlify Image CDN)
+<img
+  srcSet="...generated..."
+  sizes="${sizes}"
+  alt="After"
 />
 ~~~
 `;
@@ -60,65 +69,5 @@ detection, so format is set to WebP.
 `;
 ---
 
-<Layout title="Image CDN">
-    <div class="flex flex-col gap-12 sm:gap-16">
-        <section>
-            <h1>Keeping Your Properties' 5 Stars ranking Is Our Way of Life</h1>
-        </section>
-        <section>
-            <Markdown content={astroImageSnippet} class="mb-8" />
-            <figure>
-                <Image src={corgi} alt="Corgi" class="border-2 border-white rounded-lg" />
-                <figcaption class="mt-2 text-sm italic">
-                    Credit: photo by <a href="https://unsplash.com/@alvannee">Alvan Nee</a> on
-                    <a href="https://unsplash.com/photos/long-coated-white-and-brown-dog-lvFlpqEvuRM"> Unsplash </a>
-                </figcaption>
-            </figure>
-        </section>
-        <section>
-            <Markdown content={originalVsCdnSnippet} class="mb-8" />
-            <Diff class="border-2 border-white rounded-lg image-diff aspect-3/2">
-                <Fragment slot="item-1">
-                    <div>
-                        <div class="relative">
-                            <span class="hidden absolute py-1.5 px-2.5 text-sm rounded-md bg-gray-900/70 top-2.5 left-2.5"></span>
-                            <img src={sampleImage} alt="Corgi" />
-                        </div>
-                    </div>
-                </Fragment>
-                <Fragment slot="item-2">
-                    <div>
-                        <div class="relative">
-                            <span class="hidden absolute py-1.5 px-2.5 text-sm rounded-md bg-gray-900/70 top-2.5 right-2.5"></span>
-
-                            <img srcset={sampleImageSrcSet} alt="Corgi" />
-                        </div>
-                    </div>
-                </Fragment>
-            </Diff>
-        </section>
-    </div>
-</Layout>
-
-<script>
-    const images = document.querySelectorAll<HTMLImageElement>('.image-diff img');
-
-    images.forEach((image) => {
-        if (image.complete) {
-            showImageSize(image);
-        } else {
-            image.addEventListener('load', () => {
-                showImageSize(image);
-            });
-        }
-    });
-
-    function showImageSize(image: HTMLImageElement) {
-        const imageEntry = window?.performance?.getEntriesByName(image.currentSrc)?.[0] as PerformanceResourceTiming;
-        if (imageEntry && imageEntry.encodedBodySize) {
-            const imageOverlay = image.previousElementSibling;
-            imageOverlay.classList.remove('hidden');
-            imageOverlay.textContent = `Size: ${Math.ceil(imageEntry.encodedBodySize / 1024)}KB`;
-        }
-    }
-</script>
+*`
+
